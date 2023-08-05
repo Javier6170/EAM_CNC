@@ -1,0 +1,5 @@
+nombre: Juliana 
+apellido: Rodriguez
+correo: tatiana@gmail.com
+RH: A+
+CM: 160

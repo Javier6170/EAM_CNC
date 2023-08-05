@@ -1,0 +1,5 @@
+nombre: Javier 
+apellido: Rodriguez
+correo: juniorbarc2003@gmail.com
+RH: A+
+cm: 176

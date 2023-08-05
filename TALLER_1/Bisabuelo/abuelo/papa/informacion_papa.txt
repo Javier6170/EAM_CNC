@@ -1,0 +1,5 @@
+nombre: Javier
+Apellido: Rodriguez 
+correo: javier1@gmail.com
+RH: A+
+CM: 170
