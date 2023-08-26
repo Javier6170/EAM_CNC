@@ -182,7 +182,7 @@ server {
 
 - podemos ejecutar el comando `ll` y vemos lo siguiente:
 
-[url=https://postimg.cc/Mv7G8X20][img]https://i.postimg.cc/Mv7G8X20/directory-sites-enabled.png[/img][/url]
+[![directory-sites-enabled.png](https://i.postimg.cc/c4jtw8Fz/directory-sites-enabled.png)](https://postimg.cc/Mv7G8X20)
 
 10. debemos crear un link simbolico y ponerlo en la ruta que tenemos actualmente de la siguiente manera:
 
