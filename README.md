@@ -1,4 +1,4 @@
-# [PARCIAL 1 - Javier Rodriguez Marulanda - Documentacion procesos en Linux](https://adminlte.io)
+# [PARCIAL 1 - Javier Rodriguez Marulanda - Documentacion procesos en Linux](https://github.com/Javier6170/EAM_CNC/blob/main/README.md)
 
 ## Introducción
 
