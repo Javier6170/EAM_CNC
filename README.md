@@ -46,7 +46,6 @@ Por ejemplo:
 Veras que por defecto estara un archivo llamado `default`
 
 
-[!IMPORTANT]
 4. Copiar default y añadir tu nuevo sitio
 
 `cp default jrodriguez-dev.com`
@@ -55,7 +54,6 @@ Veras que por defecto estara un archivo llamado `default`
 
 `vim jrodriguez-dev.com`
 
-[!IMPORTANT]
 Presionamos la letra i para editar 
 
 lo que nos debe aparecer es algo como esto:
@@ -87,8 +85,8 @@ server {
 
         # SSL configuration
         #
-        # listen 443 ssl;
-        # listen [::]:443;
+        # listen 443 ssl default_server;
+        # listen [::]:443 default_server;
         #
         # Note: You should disable gzip for SSL traffic.
         # See: https://bugs.debian.org/773332
@@ -159,7 +157,87 @@ server {
 server {
         listen 80 default_server <- Eliminamos esto para que quede liesten 80;
         listen [::]:80 default_server <- Igual en este caso;
+        # SSL configuration
+        #
+        # listen 443 ssl default_server <- Eliminamos;
+        # listen [::]:443 default_server <- Eliminamos;
 ```
+7. Siguiendo en el mismo archivo debemos hacer otras ediciones 
+
+
+```
+    root /var/www/jrodriguez-dev <- En la parte de root por defecto viene como html pero la debes editar y poner tu pagina ;
+
+    server_name jrodriguez-dev.com <- Colocas como quieres llamar tu dominio de pruebas;
+```
+
+
+8. En caso de que no te deje copiar el archivo default puedes intentar:
+
+- `sudo su`
+
+- `chmod 777 defualt`
+
+9.   Ahora entramos en el directorio /sites-enabled
+
+- podemos ejecutar el comando `ll` y vemos lo siguiente:
+
+[url=https://postimg.cc/Mv7G8X20][img]https://i.postimg.cc/Mv7G8X20/directory-sites-enabled.png[/img][/url]
+
+10. debemos crear un link simbolico y ponerlo en la ruta que tenemos actualmente de la siguiente manera:
+
+`ln -s ../sites-available/jrodriguez.com .`
+
+11. Ahora debemos recarcar nginx para que cargue esta configuración nueva:
+
+`nginx -s reload`
+
+12. Ahora editamos /etc/hosts para por decir asi engañar al servidor de que estamos entrando a jrodriguez.com desde nuestra ip de maquina de la siguiente manera:
+
+`vim /etc/hosts`
+
+```
+    127.0.0.1       localhost
+    127.0.1.1       javier-virtual-machine
+    192.168.136.128 jrodriguez-dev.com 
+```
+
+colocamos la ip de nuestra maquina
+
+- Si no sabes la ip de tu maquina puedes usar el comando `ifconfig`
+
+13. Ahora crearemos nuestra pagina web entrando al directorio /var/www entonces:
+
+
+`cd /var/www`
+
+`ls`
+
+`mkdir jrodriguez-dev`
+
+`vim index.html`
+
+- Puedes colocar como ejemplo lo siguiente
+
+```
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jrodriguez</title>
+</head>
+<body>
+    <h1>Javier Rodriguez Marulanda</h1>
+    <p>Estudiante Ing. Software</p>
+</body>
+</html>
+```
+
+14. Para persistir el proceso del servidor de nginx es facil solo debes ejecutar las siguientes lineas de instrucciones en tu maquina de linux en este caso ustoy usando Ubuntu:
+
+`systemctl start nginx`
+
 
 
 
