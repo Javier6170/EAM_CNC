@@ -220,7 +220,7 @@ colocamos la ip de nuestra maquina
 - Puedes colocar como ejemplo lo siguiente
 
 ```
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -255,3 +255,164 @@ Adquirir habilidades en la partición de discos y la gestión eficiente del alma
 
 3. Utilización Eficiente de las Particiones: Explorar estrategias para aprovechar al máximo las particiones creadas, incluyendo la asignación de puntos de montaje, la gestión de sistemas de archivos y la organización de datos en diferentes particiones para mejorar el rendimiento y la seguridad del sistema.
 
+# Procesos para crear particion de disco en VMware
+
+1. Primero debes tener creada tu maquina virtual en mi caso la tengo creada con linux
+
+[![vmware-inicio.png](https://i.postimg.cc/PJHWP7v1/vmware-inicio.png)](https://postimg.cc/qhmhFjL7)
+
+2. Damos click derecho en la maquina 
+
+[![vmware-click-derecho.png](https://i.postimg.cc/mkrrX300/vmware-click-derecho.png)](https://postimg.cc/xJWYqmjR)
+
+3. Entramos a las configuraciónes luego le damos a Hard Disk (SCSI)
+
+[![vmware-hardisk.png](https://i.postimg.cc/zfXXXFf3/vmware-hardisk.png)](https://postimg.cc/xXhS6HMS)
+
+4. Le damos añadir 
+
+[![add-vmware-hardisk.png](https://i.postimg.cc/m2ysz1J9/add-vmware-hardisk.png)](https://postimg.cc/dL3Xg3qQ)
+
+5. Luego escogemos SCSI 
+
+- Luego le damos donde dice `create a new virtual_machine`
+
+[![add-vmware-hardisk-scsi-create.png](https://i.postimg.cc/nL8YyMVd/add-vmware-hardisk-scsi-create.png)](https://postimg.cc/QFbT58T5)
+
+6. Escogemos el tamaño del disco de la siguiente manera y le damos siguiente
+
+[![add-vmware-hardisk-scsi-size.png](https://i.postimg.cc/26SqMfWc/add-vmware-hardisk-scsi-size.png)](https://postimg.cc/7CjYJdm0)
+
+7. Escogemos en cual de nuestras maquinas virtuales queremos crear nuestro disco  y finalizamos la creación del nuevo disco
+
+[![add-vmware-hardisk-scsi-distribution.png](https://i.postimg.cc/6qLppjC2/add-vmware-hardisk-scsi-distribution.png)](https://postimg.cc/y3xHfTQs)
+
+8. Entramos a nuestra maquina virtual, entramos a nuestra terminal y comprobamos la existencia del nuevo disco:
+
+[![vm-lsblk.png](https://i.postimg.cc/c4zfy61p/vm-lsblk.png)](https://postimg.cc/PPmC1Xwy)
+
+9. Luego hacemos el siguiente proceso para hacer la particion al disco:
+
+`fdisk /dev/sdb`
+
+10. Le puedes dar a la m para ver todas las configuraciones:
+
+ ```
+Command (m for help): m
+
+Help:
+
+  DOS (MBR)
+   a   toggle a bootable flag
+   b   edit nested BSD disklabel
+   c   toggle the dos compatibility flag
+
+  Generic
+   d   delete a partition
+   F   list free unpartitioned space
+   l   list known partition types
+   n   add a new partition
+   p   print the partition table
+   t   change a partition type
+   v   verify the partition table
+   i   print information about a partition
+
+  Misc
+   m   print this menu
+   u   change display/entry units
+   x   extra functionality (experts only)
+
+  Script
+   I   load disk layout from sfdisk script file
+   O   dump disk layout to sfdisk script file
+
+  Save & Exit
+   w   write table to disk and exit
+   q   quit without saving changes
+
+  Create a new label
+   g   create a new empty GPT partition table
+   G   create a new empty SGI (IRIX) partition table
+   o   create a new empty DOS partition table
+   s   create a new empty Sun partition table
+```
+
+11. Luego das el comando n para crear una nueva particion
+
+`n`
+
+12. Te aparecera esto:
+
+[![vm-partition.png](https://i.postimg.cc/jjJzxfSV/vm-partition.png)](https://postimg.cc/qt4tQzKQ)
+
+13. El siguiente paso es crear como particion primaria con el comando  `p` puedes crear hasta 4 particiones
+
+
+```
+root@javier-virtual-machine:/home/javier# fdisk /dev/sdb
+
+Welcome to fdisk (util-linux 2.37.2).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+
+Command (m for help): n
+Partition type
+   p   primary (1 primary, 0 extended, 3 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (2-4, default 2): 2
+```
+
+14. Siguiente paso dar Enter
+
+15. Escogemos el tamaño de la particion que deseamos crear  por ejemplo `+1GB`
+
+
+```
+root@javier-virtual-machine:/home/javier# fdisk /dev/sdb
+
+Welcome to fdisk (util-linux 2.37.2).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+
+Command (m for help): n
+Partition type
+   p   primary (1 primary, 0 extended, 3 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (2-4, default 2): 2
+First sector (3907584-10485759, default 3907584):
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (3907584-10485759, default 10485759): +1GB
+```
+
+16. Te debe aparecer un mensaje de exito en mi caso:
+
+`Created a new partition 2 of type 'Linux' and of size 954 MiB.`
+
+17. Debemos guardar con el comando:
+
+`w`
+
+18. podemos verificar la exitencia de la nueva partición
+
+[![vm-partition-ver.png](https://i.postimg.cc/yxwDrQ0k/vm-partition-ver.png)](https://postimg.cc/H89WrtZg)
+
+- Como podemos observar creamos una nueva partición de 1GB ya tenia creado uno de 2GB antes entonces por eso aparecen dos particiones
+
+## Crear un sistema de archivos ext4 linux
+
+19. Despues de haber creado la particion de tu disco lunux, puedes crear un sistema de archivos ext4 de la soguiente forma: 
+
+`mkfs.ext4 /dev/sdb2`
+
+20. Creamos una carpeta llamada /mnt/ext4 para montar el sistema de archivos
+
+`mkdir /mnt/ext4`
+
+12. Una vez creada montamos el sistema de archivos en nuestra particion de la siguiente forma:
+
+`mount /dev/sdb2 /mnt/ext4`
+
+13. De esta forma quedaria montado el sistema de archivos en nuestra partición.
