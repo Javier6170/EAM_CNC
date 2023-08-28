@@ -241,7 +241,7 @@ colocamos la ip de nuestra maquina
 
 
 
-# Particionado de Disco y Gestión de Almacenamiento en Linux:
+# Particionado de Disco y Gestión de Almacenamiento en Linux (ununtu LTS 18.0.0):
 
 # Objetivo General:
 
