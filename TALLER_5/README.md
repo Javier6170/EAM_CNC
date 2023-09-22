@@ -75,10 +75,15 @@ volumes:
 
 5. `postgres` Este servicio utiliza la imagen de Docker `postgres:10`, que es una imagen de PostgreSQL en su versión 10. Se establece la contraseña de la base de datos en "example" a través de la variable de entorno `POSTGRES_PASSWORD`. También se define un volumen para persistir los datos de la base de datos PostgreSQL en la ruta `$PWD/pgdata` en el host.
 
+- ejecutamos con el comando ``` docker-compose up ```
 
-## Resumend de la eejcución
+[![Screenshot-from-2023-09-22-13-16-12.png](https://i.postimg.cc/BvqFngmx/Screenshot-from-2023-09-22-13-16-12.png)](https://postimg.cc/FYBzPj5R)
+
+
+## Resumen de la eejcución
 
 En resumen, este archivo de Docker Compose define dos servicios: uno para Drupal y otro para PostgreSQL. Drupal se ejecutará en el puerto 8080 de tu máquina, y PostgreSQL se utilizará como base de datos para Drupal. Los volúmenes se utilizan para garantizar la persistencia de los datos en ambos servicios, y se especifica la versión de Docker Compose utilizada en el archivo.
+
 
 
 ## Una vez en ejecución 
