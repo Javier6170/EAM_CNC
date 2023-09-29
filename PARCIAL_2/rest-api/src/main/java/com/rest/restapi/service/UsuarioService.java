@@ -25,17 +25,18 @@ public class UsuarioService {
     public Usuario getUserById(Integer id) { return usuarioRepository.getReferenceById(id); }
 
     public Optional<Usuario> updateUser(Integer id, Usuario usuario){
-        Optional<Usuario> existsUserById =usuarioRepository.findById(id);
-        if (existsUserById.isPresent()){
-            usuario.setNombre(usuario.getNombre());
-            usuario.setApellido(usuario.getApellido());
-            usuario.setEdad(usuario.getEdad());
-            usuario.setEmail(usuario.getEmail());
-            usuario.setTelefono(usuario.getTelefono());
-            usuario.setCedula(usuario.getCedula());
-            usuario.setDireccion(usuario.getDireccion());
+        Optional<Usuario> existsUserById = usuarioRepository.findById(id);
 
-            return Optional.of(usuarioRepository.save(usuario));
+        if (existsUserById.isPresent()){
+            Usuario user = existsUserById.get();
+            user.setNombre(usuario.getNombre());
+            user.setApellido(usuario.getApellido());
+            user.setEdad(usuario.getEdad());
+            user.setTelefono(usuario.getTelefono());
+            user.setCedula(usuario.getCedula());
+            user.setDireccion(usuario.getDireccion());
+
+            return Optional.of(usuarioRepository.save(user));
         }
         return Optional.empty();
     }
