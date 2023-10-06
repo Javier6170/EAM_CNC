@@ -9,7 +9,7 @@ services:
     environment:
       - DATABASE_URL=jdbc:postgresql://java_db:5432/postgres
       - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=postgres
+      - DATABASE_PASSWORD=postgresdocker
     depends_on:
       - java_db
   java_db:
@@ -19,6 +19,7 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PASSWORD=postgresdocker
       - POSTGRES_DB=postgres
-    
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
