@@ -1,0 +1,79 @@
+version: '3.9'
+
+services:
+  create-service:
+    container_name: create-service
+    image: create-service-image
+    build: ./create
+    ports:
+      - "8091:8091"
+    environment:
+      - DATABASE_URL=jdbc:postgresql://database:5432/postgres
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgresdocker
+    depends_on:
+      - database
+    networks:
+      - microservices-net
+
+  update-service:
+    container_name: update-service
+    image: update-service-image
+    build: ./update
+    ports:
+      - "8092:8092"
+    environment:
+      - DATABASE_URL=jdbc:postgresql://database:5432/postgres
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgresdocker
+    depends_on:
+      - database
+    networks:
+      - microservices-net
+
+  delete-service:
+    container_name: delete-service
+    image: delete-service-image
+    build: ./delete
+    ports:
+      - "8093:8093"
+    environment:
+      - DATABASE_URL=jdbc:postgresql://database:5432/postgres
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgresdocker
+    depends_on:
+      - database
+    networks:
+      - microservices-net
+
+  list-service:
+    container_name: list-service
+    image: list-service-image
+    build: ./list
+    ports:
+      - "8094:8094"
+    environment:
+      - DATABASE_URL=jdbc:postgresql://database:5432/postgres
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgresdocker
+    depends_on:
+      - database
+    networks:
+      - microservices-net
+
+  database:
+    container_name: java_db
+    image: postgres:15.4
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgresdocker
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    networks:
+      - microservices-net
+
+networks:
+  microservices-net:
