@@ -1,0 +1,73 @@
+# Define a Persistent Volume Claim (PVC) for PostgreSQL Storage, dynamically provisioned by the cluster
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+  labels:
+    app: postgres
+    tier: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Configure Deployment of PostgreSQL server
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+    tier: database
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+      tier: database
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgres
+        tier: database
+    spec:
+      containers:
+        - image: postgres:12
+          name: postgres
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_DB
+              value: postgres
+          ports:
+            - containerPort: 5432
+              name: postgres
+          volumeMounts:
+            - name: postgres-persistent-storage
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-persistent-storage
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
+---
+# Define a Service to expose PostgreSQL to other services
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+    tier: database
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: postgres
+    tier: database
+  clusterIP: None

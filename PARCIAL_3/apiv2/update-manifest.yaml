@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: update-k8s
+spec:
+  selector:
+    matchLabels:
+      app: updatepg
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: updatepg
+    spec:
+      containers:
+        - name: k8s-update
+          image: jav1prl/microservices:update-service-image
+          ports:
+            - containerPort: 8083
+          envFrom:
+            - configMapRef:
+                name: my-app-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: update-svc
+spec:
+  selector:
+    app: updatepg
+  ports:
+    - protocol: "TCP"
+      port: 8083
+      targetPort: 8080
+      name: http
+  type: LoadBalancer

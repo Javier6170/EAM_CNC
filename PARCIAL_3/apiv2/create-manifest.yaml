@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crear-k8s
+spec:
+  selector:
+    matchLabels:
+      app: crearpg
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: crearpg
+    spec:
+      containers:
+        - name: k8s-crear
+          image: jav1prl/microservices:create-service-image
+          ports:
+            - containerPort: 8082
+          envFrom:
+            - configMapRef:
+                name: my-app-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crear-svc
+spec:
+  selector:
+    app: crearpg
+  ports:
+    - protocol: "TCP"
+      port: 8082
+      targetPort: 8080
+      name: http
+  type: LoadBalancer

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: listar-k8s
+spec:
+  selector:
+    matchLabels:
+      app: listarpg
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: listarpg
+    spec:
+      containers:
+        - name: k8s-listar
+          image: jav1prl/microservices:list-service-image
+          ports:
+            - containerPort: 8081
+          envFrom:
+            - configMapRef:
+                name: my-app-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: listar-svc
+spec:
+  selector:
+    app: listarpg
+  ports:
+    - protocol: "TCP"
+      port: 8081
+      targetPort: 8080
+      name: http
+  type: LoadBalancer

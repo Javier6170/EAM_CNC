@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservices-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservices
+  template:
+    metadata:
+      labels:
+        app: microservices
+    spec:
+      containers:
+      - name: create-service-container
+        image: jav1prl/microservices:create-service-image
+        ports:
+        - containerPort: 8081
+        envFrom:
+            - configMapRef:
+                name: my-app-config
+      - name: update-service-container
+        image: jav1prl/microservices:update-service-image
+        ports:
+        - containerPort: 8082
+        envFrom:
+            - configMapRef:
+                name: my-app-config
+      - name: delete-service-container
+        image: jav1prl/microservices:delete-service-image
+        ports:
+        - containerPort: 8083
+        envFrom:
+            - configMapRef:
+                name: my-app-config
+      - name: list-service-container
+        image: jav1prl/microservices:list-service-image
+        ports:
+        - containerPort: 8084
+        envFrom:
+            - configMapRef:
+                name: my-app-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-service
+spec:
+  selector:
+    app: microservices
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8080
+      name: http
+    - protocol: TCP
+      port: 8082
+      targetPort: 8080
+      name: http
+    - protocol: TCP
+      port: 8083
+      targetPort: 8080
+      name: http
+    - protocol: TCP
+      port: 8084
+      targetPort: 8080
+      name: http
+  type: LoadBalancer
